@@ -53,56 +53,56 @@
             transition: opacity 0.5s ease;
         }
 
-        /* 遙測數據區 (縮小為 1/5) */
+        /* 遙測數據區 (放大為原先2倍) */
         #telemetry-overlay {
             position: absolute;
-            top: 3px; /* 15px / 5 */
-            left: 3px; /* 15px / 5 */
+            top: 6px; 
+            left: 6px; 
             z-index: 25;
             pointer-events: none;
             display: flex; /* 改為預設顯示 */
             flex-direction: column;
-            gap: 1px; /* 4px / 5 */
+            gap: 2px; 
         }
 
         .telemetry-bubble {
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
             color: white;
-            padding: 2px 4px; /* 10px 20px / 5 */
-            border-radius: 1.6px; /* 8px / 5 */
-            font-size: 6px; /* 30px / 5 */
+            padding: 4px 8px; 
+            border-radius: 3.2px; 
+            font-size: 12px; 
             font-family: monospace;
             font-weight: 600;
             display: flex;
             align-items: center;
-            gap: 3px; /* 15px / 5 */
-            min-width: 50px; /* 250px / 5 */
+            gap: 6px; 
+            min-width: 100px; 
             border: 0.2px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* 起飛提示 (縮小為 1/5) */
+        /* 起飛提示 (放大為原先2倍) */
         #launch-hint {
             position: absolute;
-            top: 8px; /* 40px / 5 */
+            top: 16px; 
             left: 50%;
             transform: translateX(-50%);
             z-index: 15;
             pointer-events: none;
             display: block; /* 改為預設顯示 */
-            text-shadow: 0 0.4px 0.8px rgba(0,0,0,0.5); /* 陰影縮小 */
-            padding: 1.6px 4.8px; /* 縮小原 tailwind 的 px-6 py-2 */
-            font-size: 3.6px; /* 縮小原 tailwind 的 text-lg */
+            text-shadow: 0 0.4px 0.8px rgba(0,0,0,0.5); /* 陰影 */
+            padding: 3.2px 9.6px; 
+            font-size: 7.2px; 
         }
 
         /* ================= 油門控制點專屬樣式 ================= */
         .track-line {
             position: absolute;
-            width: 1px; /* 4px / 5 (四捨五入到1px確保顯示) */
+            width: 2px; 
             background: #444;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 0.4px; /* 2px / 5 */
+            border-radius: 0.8px; 
             z-index: 10;
         }
         
@@ -113,13 +113,13 @@
             z-index: 15;
             touch-action: none;
             transition: background-color 0.3s ease;
-            width: 72px; /* 360px / 5 */
-            height: 72px; /* 360px / 5 */
+            width: 144px; /* 從 72px 放大為 144px */
+            height: 144px; 
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.6); /* 陰影縮小 */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6); 
         }
 
         .dot-red { background-color: #dc2626 !important; }
@@ -127,14 +127,14 @@
 
         #throttle-text {
             position: absolute;
-            top: -16px; /* -80px / 5 */
+            top: -32px; 
             left: 50%;
             transform: translateX(-50%);
             color: white;
             font-weight: bold;
-            font-size: 8.4px; /* 42px / 5 */
+            font-size: 16.8px; 
             pointer-events: none;
-            letter-spacing: 0.4px; /* 2px / 5 */
+            letter-spacing: 0.8px; 
             z-index: 20;
             white-space: nowrap;
         }
@@ -151,7 +151,7 @@
 
         .ring-bg {
             stroke: #333;
-            stroke-width: 8; /* SVG內部視圖尺寸不動，外殼縮小會自適應比例 */
+            stroke-width: 8; 
             fill: none;
         }
 
@@ -405,18 +405,18 @@
         function calculateDragRange() {
             const rect = bottomControls.getBoundingClientRect();
             
-            // 所有數學數值跟著等比例縮小 (1/5)
-            const trackTop = 24; // 120 / 5
-            const originalLength = rect.height - trackTop - 26; // 130 / 5
-            maxDragY = Math.max(10, originalLength / 2); // 50 / 5
+            // 所有數學數值跟著等比例放大 (x2)
+            const trackTop = 48; // 原 24 * 2
+            const originalLength = rect.height - trackTop - 52; // 原 26 * 2
+            maxDragY = Math.max(20, originalLength / 2); // 原 10 * 2
             
             const track = document.getElementById('throttle-track');
             track.style.top = trackTop + 'px';
             track.style.height = maxDragY + 'px';
             track.style.bottom = 'auto';
             
-            // 72px 圓的一半為 36px
-            const dotBaseTop = trackTop + maxDragY - 36; // 180 / 5 = 36
+            // 144px 圓的一半為 72px
+            const dotBaseTop = trackTop + maxDragY - 72; 
             throttleDot.style.top = dotBaseTop + 'px';
             throttleDot.style.bottom = 'auto'; 
         }
@@ -615,7 +615,8 @@
             renderer.render(scene, camera);
             
             if (airplane) {
-                const w = Math.max(cw*0.4, 240), h = w*0.75;
+                // 將子母畫面小視窗寬高縮小為 1/2
+                const w = Math.max(cw * 0.2, 120), h = w * 0.75; 
                 const x = cw - w - 15, y = ch - h - 15;
                 renderer.setViewport(x, y, w, h); 
                 renderer.setScissor(x, y, w, h); 
